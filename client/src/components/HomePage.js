@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     overflow: 'hidden',
   },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+  },
   title: {
     fontFamily: '"Comic Sans MS", cursive, sans-serif',
     color: '#ffffff',
@@ -55,8 +59,8 @@ const HomePage = () => {
   }, []);
 
   const fadeIn = useSpring({
-    from: { opacity: 0, transform: 'translateY(50px)' },
-    to: { opacity: 1, transform: 'translateY(0)' },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
     config: { duration: 1000 },
   });
 
@@ -78,57 +82,61 @@ const HomePage = () => {
           <Confetti />
         </div>
       )}
-      <Grid container direction="column" alignItems="center" justify="center" spacing={4}>
-        <animated.div style={fadeIn}>
-          <Typography variant="h2" className={classes.title}>
-            Welkom bij KidzFun!
-          </Typography>
-        </animated.div>
+      <animated.div style={fadeIn} className={classes.content}>
+        <Grid container direction="column" alignItems="center" justify="center" spacing={4}>
+          <Grid item>
+            <Typography variant="h2" className={classes.title}>
+              Welkom bij KidzFun!
+            </Typography>
+          </Grid>
 
-        <animated.div style={bounce}>
-          <img 
-            src="/mascot.png" 
-            alt="KidzFun Mascotte" 
-            className={classes.mascot}
-          />
-        </animated.div>
+          <Grid item>
+            <animated.div style={bounce}>
+              <img 
+                src="/mascot.png" 
+                alt="KidzFun Mascotte" 
+                className={classes.mascot}
+              />
+            </animated.div>
+          </Grid>
 
-        <animated.div style={fadeIn}>
-          <Button
-            component={Link}
-            to="/games"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            🎮 Speel spelletjes
-          </Button>
-        </animated.div>
+          <Grid item>
+            <Button
+              component={Link}
+              to="/games"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              🎮 Speel spelletjes
+            </Button>
+          </Grid>
 
-        <animated.div style={fadeIn}>
-          <Button
-            component={Link}
-            to="/ar"
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-          >
-            🔍 AR Avontuur
-          </Button>
-        </animated.div>
+          <Grid item>
+            <Button
+              component={Link}
+              to="/ar"
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+            >
+              🔍 AR Avontuur
+            </Button>
+          </Grid>
 
-        <animated.div style={fadeIn}>
-          <Button
-            component={Link}
-            to="/chatbot"
-            variant="contained"
-            color="default"
-            className={classes.button}
-          >
-            🤖 Praat met onze mascotte
-          </Button>
-        </animated.div>
-      </Grid>
+          <Grid item>
+            <Button
+              component={Link}
+              to="/chatbot"
+              variant="contained"
+              color="default"
+              className={classes.button}
+            >
+              🤖 Praat met onze mascotte
+            </Button>
+          </Grid>
+        </Grid>
+      </animated.div>
     </Box>
   );
 };
