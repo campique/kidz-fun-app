@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
+    zIndex: 1000, // Ensure confetti is on top
   },
 }));
 
@@ -139,7 +140,10 @@ const HomePage = () => {
       
       {showConfetti && (
         <div className={classes.confettiWrapper}>
-          <Confetti />
+          <Confetti 
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
         </div>
       )}
     </Box>
