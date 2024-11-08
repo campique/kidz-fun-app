@@ -1,4 +1,3 @@
-// TicTacToe.js
 import React, { useState, useEffect } from 'react';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,6 +5,7 @@ import { useSpring, animated } from 'react-spring';
 
 const useStyles = makeStyles((theme) => ({
   cell: {
+    width: '100px',
     height: '100px',
     display: 'flex',
     justifyContent: 'center',
@@ -102,9 +102,83 @@ const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
   };
 
   const getBestMove = (board) => {
-    // Implementeer hier het minimax algoritme voor de beste zet
-    // Dit is een vereenvoudigde versie die de eerste lege cel kiest
-    return board.findIndex(cell => cell === null);
+    // Minimax algorithm implementation
+    const player = 'O';
+    const opponent = 'X';
+
+    const isMovesLeft = (board) => {
+      return board.includes(null);
+    };
+
+    const evaluate = (board) => {
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          if (board[a] === player) return 10;
+          if (board[a] === opponent) return -10;
+        }
+      }
+      return 0;
+    };
+
+    const minimax = (board, depth, isMax) => {
+      const score = evaluate(board);
+
+      if (score === 10) return score - depth;
+      if (score === -10) return score + depth;
+      if (!isMovesLeft(board)) return 0;
+
+      if (isMax) {
+        let best = -1000;
+        for (let i = 0; i < 9; i++) {
+          if (board[i] === null) {
+            board[i] = player;
+            best = Math.max(best, minimax(board, depth + 1, !isMax));
+            board[i] = null;
+          }
+        }
+        return best;
+      } else {
+        let best = 1000;
+        for (let i = 0; i < 9; i++) {
+          if (board[i] === null) {
+            board[i] = opponent;
+            best = Math.min(best, minimax(board, depth + 1, !isMax));
+            board[i] = null;
+          }
+        }
+        return best;
+      }
+    };
+
+    let bestMove = -1;
+    let bestVal = -1000;
+
+    for (let i = 0; i < 9; i++) {
+      if (board[i] === null) {
+        board[i] = player;
+        const moveVal = minimax(board, 0, false);
+        board[i] = null;
+
+        if (moveVal > bestVal) {
+          bestMove = i;
+          bestVal = moveVal;
+        }
+      }
+    }
+
+    return bestMove;
   };
 
   const renderCell = (index) => {
@@ -128,18 +202,18 @@ const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
       <Typography variant="h4" align="center" gutterBottom>
         Boter-Kaas-Eieren
       </Typography>
-      <Grid container spacing={2}>
+      <Typography variant="h6" align="center" gutterBottom>
+        {winner 
+          ? (winner === 'draw' ? 'Gelijkspel!' : `Winnaar: ${winner}`) 
+          : `Huidige speler: ${currentPlayer}`}
+      </Typography>
+      <Grid container spacing={1} justifyContent="center">
         {board.map((_, index) => (
-          <Grid item xs={4} key={index}>
+          <Grid item key={index}>
             {renderCell(index)}
           </Grid>
         ))}
       </Grid>
-      {winner && (
-        <Typography variant="h5" align="center" style={{ marginTop: '20px' }}>
-          {winner === 'draw' ? 'Gelijkspel!' : `Winnaar: ${winner}`}
-        </Typography>
-      )}
       <Button 
         variant="contained" 
         color="primary" 
