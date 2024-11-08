@@ -27,7 +27,38 @@ main {
   font-size: 0.8em;
 }
 
-/* Styles for the Games component */
+/* Home component styles */
+.home {
+  text-align: center;
+  padding: 20px;
+}
+
+.home h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.home p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.home .button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.home .button:hover {
+  background-color: #45a049;
+}
+
+/* GameSelection component styles */
 .games-container {
   padding: 20px;
   max-width: 1200px;
@@ -74,21 +105,57 @@ main {
   background-color: #45a049;
 }
 
-/* Styles for the Lobby component */
+/* GameMode component styles */
+.game-mode {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.game-mode button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.game-mode button:hover {
+  background-color: #45a049;
+}
+
+/* Lobby component styles */
 .lobby {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.lobby-title {
-  font-size: 2rem;
-  margin-bottom: 20px;
+.tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 
-.lobby-button {
-  margin: 10px;
-  padding: 10px 20px;
+.table {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
   font-size: 1rem;
   background-color: #4CAF50;
   color: white;
@@ -98,25 +165,11 @@ main {
   transition: background-color 0.3s ease;
 }
 
-.lobby-button:hover {
+.table button:hover {
   background-color: #45a049;
 }
 
-.room-list {
-  margin-top: 20px;
-}
-
-.room-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-}
-
-/* Styles for the game components */
+/* Game component styles */
 .connect-four, .tic-tac-toe, .pictionary {
   max-width: 500px;
   margin: 0 auto;
