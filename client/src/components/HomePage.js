@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     overflow: 'hidden',
   },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+  },
   title: {
     fontFamily: '"Comic Sans MS", cursive, sans-serif',
     color: '#ffffff',
@@ -35,15 +39,6 @@ const useStyles = makeStyles((theme) => ({
     height: 200,
     marginBottom: theme.spacing(4),
   },
-  confettiWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    zIndex: 1000, // Ensure confetti is on top
-  },
 }));
 
 const HomePage = () => {
@@ -51,16 +46,8 @@ const HomePage = () => {
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    // Start confetti after a 500ms delay
-    const confettiTimer = setTimeout(() => setShowConfetti(true), 500);
-    
-    // Stop confetti after 5 seconds
-    const stopConfettiTimer = setTimeout(() => setShowConfetti(false), 5500);
-
-    return () => {
-      clearTimeout(confettiTimer);
-      clearTimeout(stopConfettiTimer);
-    };
+    const timer = setTimeout(() => setShowConfetti(true), 500);
+    return () => clearTimeout(timer);
   }, []);
 
   const fadeIn = useSpring({
@@ -82,7 +69,8 @@ const HomePage = () => {
 
   return (
     <Box className={classes.root}>
-      <animated.div style={fadeIn}>
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      <animated.div style={fadeIn} className={classes.content}>
         <Grid container direction="column" alignItems="center" justify="center" spacing={4}>
           <Grid item>
             <Typography variant="h2" className={classes.title}>
@@ -137,15 +125,6 @@ const HomePage = () => {
           </Grid>
         </Grid>
       </animated.div>
-      
-      {showConfetti && (
-        <div className={classes.confettiWrapper}>
-          <Confetti 
-            width={window.innerWidth}
-            height={window.innerHeight}
-          />
-        </div>
-      )}
     </Box>
   );
 };
