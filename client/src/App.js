@@ -9,6 +9,7 @@ import Lobby from './components/Lobby';
 import ConnectFour from './components/games/ConnectFour';
 import TicTacToe from './components/games/TicTacToe';
 import Pictionary from './components/games/Pictionary';
+import './App.css';  // Deze regel importeert de App.css file
 
 function App() {
   return (
