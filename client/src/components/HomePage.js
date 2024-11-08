@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     padding: theme.spacing(4),
-    position: 'relative', // Add this line
-    overflow: 'hidden',   // Add this line
+    position: 'relative',
+    overflow: 'hidden',
   },
   title: {
     fontFamily: '"Comic Sans MS", cursive, sans-serif',
@@ -47,10 +47,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HomePage = () => {
   const classes = useStyles();
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
-    setShowConfetti(true);
     const timer = setTimeout(() => setShowConfetti(false), 5000);
     return () => clearTimeout(timer);
   }, []);
