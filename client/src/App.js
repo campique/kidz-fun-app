@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Lobby from './components/Lobby';
 import Games from './components/Games';
-import TicTacToe from './components/TicTacToe';
-import ConnectFour from './components/ConnectFour';
-import Pictionary from './components/Pictionary';
+import TicTacToe from './components/games/TicTacToe';
+import ConnectFour from './components/games/ConnectFour';
+import Pictionary from './components/games/Pictionary';
 import './App.css';
 
 function App() {
