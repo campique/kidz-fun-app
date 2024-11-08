@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     padding: theme.spacing(4),
+    position: 'relative', // Add this line
+    overflow: 'hidden',   // Add this line
   },
   title: {
     fontFamily: '"Comic Sans MS", cursive, sans-serif',
@@ -32,6 +34,14 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     height: 200,
     marginBottom: theme.spacing(4),
+  },
+  confettiWrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none',
   },
 }));
 
@@ -64,7 +74,11 @@ const HomePage = () => {
 
   return (
     <Box className={classes.root}>
-      {showConfetti && <Confetti />}
+      {showConfetti && (
+        <div className={classes.confettiWrapper}>
+          <Confetti />
+        </div>
+      )}
       <Grid container direction="column" alignItems="center" justify="center" spacing={4}>
         <animated.div style={fadeIn}>
           <Typography variant="h2" className={classes.title}>
