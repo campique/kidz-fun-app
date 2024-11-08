@@ -1,39 +1,126 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Grid, Paper, Typography, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSpring, animated } from 'react-spring';
 
-const ConnectFour = () => {
+const useStyles = makeStyles((theme) => ({
+  cell: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    margin: '2px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
+  },
+  red: {
+    backgroundColor: 'red',
+  },
+  yellow: {
+    backgroundColor: 'yellow',
+  },
+}));
+
+const ConnectFour = ({ mode, difficulty, onGameEnd, socket }) => {
+  const classes = useStyles();
   const [board, setBoard] = useState(Array(6).fill().map(() => Array(7).fill(null)));
-  const [currentPlayer, setCurrentPlayer] = useState('🔴');
-  const location = useLocation();
-  const { players } = location.state || { players: ['Player 1', 'Player 2'] };
+  const [currentPlayer, setCurrentPlayer] = useState('red');
+  const [winner, setWinner] = useState(null);
 
-  const handleMove = (col) => {
-    const newBoard = board.map(row => [...row]);
+  useEffect(() => {
+    if (mode === 'online' && socket) {
+      socket.on('updateGame', (newBoard) => {
+        setBoard(newBoard);
+        setCurrentPlayer(currentPlayer === 'red' ? 'yellow' : 'red');
+      });
+    }
+  }, [mode, socket, currentPlayer]);
+
+  const checkWinner = (board, row, col) => {
+    const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+    for (let [dx, dy] of directions) {
+      let count = 1;
+      for (let i = 1; i < 4; i++) {
+        const newRow = row + i * dx;
+        const newCol = col + i * dy;
+        if (newRow < 0 || newRow >= 6 || newCol < 0 || newCol >= 7 || board[newRow][newCol] !== board[row][col]) break;
+        count++;
+      }
+      for (let i = 1; i < 4; i++) {
+        const newRow = row - i * dx;
+        const newCol = col - i * dy;
+        if (newRow < 0 || newRow >= 6 || newCol < 0 || newCol >= 7 || board[newRow][newCol] !== board[row][col]) break;
+        count++;
+      }
+      if (count >= 4) return board[row][col];
+    }
+    return null;
+  };
+
+  const handleColumnClick = (col) => {
+    if (winner) return;
+    let newBoard = board.map(row => [...row]);
     for (let row = 5; row >= 0; row--) {
       if (!newBoard[row][col]) {
         newBoard[row][col] = currentPlayer;
+        const newWinner = checkWinner(newBoard, row, col);
+        if (newWinner) {
+          setWinner(newWinner);
+          onGameEnd(newWinner);
+        } else {
+          setCurrentPlayer(currentPlayer === 'red' ? 'yellow' : 'red');
+        }
         setBoard(newBoard);
-        setCurrentPlayer(currentPlayer === '🔴' ? '🟡' : '🔴');
+        if (mode === 'online' && socket) {
+          socket.emit('makeMove', newBoard);
+        }
         break;
       }
     }
   };
 
+  const renderCell = (cell, rowIndex, colIndex) => {
+    const cellAnimation = useSpring({
+      from: { opacity: 0, transform: 'scale(0.5)' },
+      to: { opacity: 1, transform: 'scale(1)' },
+      config: { tension: 300, friction: 10 },
+    });
+
+    return (
+      <animated.div style={cellAnimation} key={`${rowIndex}-${colIndex}`}>
+        <Paper 
+          className={`${classes.cell} ${cell ? classes[cell] : ''}`} 
+          onClick={() => handleColumnClick(colIndex)}
+        />
+      </animated.div>
+    );
+  };
+
   return (
-    <div className="connect-four">
-      <h2>4 op een rij</h2>
-      <div className="board">
+    <div>
+      <Typography variant="h4" align="center" gutterBottom>
+        Vier op een Rij
+      </Typography>
+      <Typography variant="h6" align="center" gutterBottom>
+        {winner ? `Winnaar: ${winner}` : `Huidige speler: ${currentPlayer}`}
+      </Typography>
+      <Grid container justifyContent="center">
         {board.map((row, rowIndex) => (
-          <div key={rowIndex} className="row">
-            {row.map((cell, colIndex) => (
-              <div key={colIndex} className="cell" onClick={() => handleMove(colIndex)}>
-                {cell}
-              </div>
-            ))}
-          </div>
+          <Grid container item key={rowIndex} justifyContent="center">
+            {row.map((cell, colIndex) => renderCell(cell, rowIndex, colIndex))}
+          </Grid>
         ))}
-      </div>
-      <p>Current turn: {currentPlayer === '🔴' ? players[0] : players[1]} ({currentPlayer})</p>
+      </Grid>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={() => onGameEnd(null)} 
+        style={{ marginTop: '20px' }}
+      >
+        Terug naar lobby
+      </Button>
     </div>
   );
 };
