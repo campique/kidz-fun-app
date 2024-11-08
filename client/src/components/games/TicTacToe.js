@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSpring, animated } from 'react-spring';
@@ -19,8 +19,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
+const Cell = memo(({ value, onClick }) => {
   const classes = useStyles();
+  const cellAnimation = useSpring({
+    from: { opacity: 0, transform: 'scale(0.5)' },
+    to: { opacity: 1, transform: 'scale(1)' },
+    config: { tension: 300, friction: 10 },
+  });
+
+  return (
+    <animated.div style={cellAnimation}>
+      <Paper className={classes.cell} onClick={onClick}>
+        {value}
+      </Paper>
+    </animated.div>
+  );
+});
+
+const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState('X');
   const [winner, setWinner] = useState(null);
@@ -102,7 +118,6 @@ const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
   };
 
   const getBestMove = (board) => {
-    // Minimax algorithm implementation
     const player = 'O';
     const opponent = 'X';
 
@@ -181,22 +196,6 @@ const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
     return bestMove;
   };
 
-  const renderCell = (index) => {
-    const cellAnimation = useSpring({
-      from: { opacity: 0, transform: 'scale(0.5)' },
-      to: { opacity: 1, transform: 'scale(1)' },
-      config: { tension: 300, friction: 10 },
-    });
-
-    return (
-      <animated.div style={cellAnimation}>
-        <Paper className={classes.cell} onClick={() => handleClick(index)}>
-          {board[index]}
-        </Paper>
-      </animated.div>
-    );
-  };
-
   return (
     <div>
       <Typography variant="h4" align="center" gutterBottom>
@@ -208,9 +207,9 @@ const TicTacToe = ({ mode, difficulty, onGameEnd, socket }) => {
           : `Huidige speler: ${currentPlayer}`}
       </Typography>
       <Grid container spacing={1} justifyContent="center">
-        {board.map((_, index) => (
+        {board.map((value, index) => (
           <Grid item key={index}>
-            {renderCell(index)}
+            <Cell value={value} onClick={() => handleClick(index)} />
           </Grid>
         ))}
       </Grid>
