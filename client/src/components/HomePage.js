@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Grid, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSpring, animated } from 'react-spring';
-import Confetti from 'react-confetti';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,12 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 const HomePage = () => {
   const classes = useStyles();
-  const [showConfetti, setShowConfetti] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowConfetti(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const fadeIn = useSpring({
     from: { opacity: 0, transform: 'translateY(50px)' },
@@ -69,7 +62,6 @@ const HomePage = () => {
 
   return (
     <Box className={classes.root}>
-      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <animated.div style={fadeIn} className={classes.content}>
         <Grid container direction="column" alignItems="center" justify="center" spacing={4}>
           <Grid item>
