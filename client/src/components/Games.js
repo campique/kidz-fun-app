@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TicTacToe from './games/TicTacToe';
 import ConnectFour from './games/ConnectFour';
 import Pictionary from './games/Pictionary';
-import './games.css';
+import './Games.css';
 
 const Games = () => {
   const [gameMode, setGameMode] = useState('');
