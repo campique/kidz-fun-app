@@ -1,33 +1,35 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from './styles/theme';
-import HomePage from './components/HomePage';
-import Games from './components/Games';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Lobby from './components/Lobby';
-import ConnectFour from './components/games/ConnectFour';
-import TicTacToe from './components/games/TicTacToe';
-import Pictionary from './components/games/Pictionary';
+import Games from './components/Games';
+import TicTacToe from './components/TicTacToe';
+import ConnectFour from './components/ConnectFour';
+import Pictionary from './components/Pictionary';
 import './App.css';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <div className="App">
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/games" component={Games} />
-            <Route path="/games/:game/lobby" component={Lobby} />
-            <Route path="/games/connect-four/play" component={ConnectFour} />
-            <Route path="/games/tic-tac-toe/play" component={TicTacToe} />
-            <Route path="/games/pictionary/play" component={Pictionary} />
-          </Switch>
-        </div>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <h1>Multiplayer Games Platform</h1>
+        </header>
+        <main>
+          <Routes>
+            <Route path="/" element={<Navigate to="/lobby" />} />
+            <Route path="/lobby" element={<Lobby />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/game/tictactoe" element={<TicTacToe />} />
+            <Route path="/game/connectfour" element={<ConnectFour />} />
+            <Route path="/game/pictionary" element={<Pictionary />} />
+            <Route path="/game/:roomId" element={<Games />} />
+          </Routes>
+        </main>
+        <footer className="App-footer">
+          <p>&copy; 2023 Multiplayer Games Platform. All rights reserved.</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
 
