@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSpring, animated } from 'react-spring';
@@ -23,8 +23,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ConnectFour = ({ mode, difficulty, onGameEnd, socket }) => {
+const Cell = memo(({ cell, rowIndex, colIndex, handleColumnClick }) => {
   const classes = useStyles();
+  const cellAnimation = useSpring({
+    from: { opacity: 0, transform: 'scale(0.5)' },
+    to: { opacity: 1, transform: 'scale(1)' },
+    config: { tension: 300, friction: 10 },
+  });
+
+  return (
+    <animated.div style={cellAnimation}>
+      <Paper 
+        className={`${classes.cell} ${cell ? classes[cell] : ''}`} 
+        onClick={() => handleColumnClick(colIndex)}
+      />
+    </animated.div>
+  );
+});
+
+const ConnectFour = ({ mode, difficulty, onGameEnd, socket }) => {
   const [board, setBoard] = useState(Array(6).fill().map(() => Array(7).fill(null)));
   const [currentPlayer, setCurrentPlayer] = useState('red');
   const [winner, setWinner] = useState(null);
@@ -81,23 +98,6 @@ const ConnectFour = ({ mode, difficulty, onGameEnd, socket }) => {
     }
   };
 
-  const renderCell = (cell, rowIndex, colIndex) => {
-    const cellAnimation = useSpring({
-      from: { opacity: 0, transform: 'scale(0.5)' },
-      to: { opacity: 1, transform: 'scale(1)' },
-      config: { tension: 300, friction: 10 },
-    });
-
-    return (
-      <animated.div style={cellAnimation} key={`${rowIndex}-${colIndex}`}>
-        <Paper 
-          className={`${classes.cell} ${cell ? classes[cell] : ''}`} 
-          onClick={() => handleColumnClick(colIndex)}
-        />
-      </animated.div>
-    );
-  };
-
   return (
     <div>
       <Typography variant="h4" align="center" gutterBottom>
@@ -109,7 +109,15 @@ const ConnectFour = ({ mode, difficulty, onGameEnd, socket }) => {
       <Grid container justifyContent="center">
         {board.map((row, rowIndex) => (
           <Grid container item key={rowIndex} justifyContent="center">
-            {row.map((cell, colIndex) => renderCell(cell, rowIndex, colIndex))}
+            {row.map((cell, colIndex) => (
+              <Cell 
+                key={`${rowIndex}-${colIndex}`}
+                cell={cell}
+                rowIndex={rowIndex}
+                colIndex={colIndex}
+                handleColumnClick={handleColumnClick}
+              />
+            ))}
           </Grid>
         ))}
       </Grid>
