@@ -11,12 +11,16 @@
   color: white;
 }
 
+.App-header h1 {
+  margin: 0;
+}
+
 main {
   flex-grow: 1;
   padding: 20px;
 }
 
-footer {
+.App-footer {
   background-color: #282c34;
   color: white;
   padding: 10px;
@@ -26,6 +30,8 @@ footer {
 /* Styles for the Games component */
 .games-container {
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .games-grid {
@@ -40,11 +46,12 @@ footer {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .game-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .game-emoji {
@@ -69,9 +76,44 @@ footer {
 
 /* Styles for the Lobby component */
 .lobby {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+}
+
+.lobby-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.lobby-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.lobby-button:hover {
+  background-color: #45a049;
+}
+
+.room-list {
+  margin-top: 20px;
+}
+
+.room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
 }
 
 /* Styles for the game components */
@@ -103,6 +145,11 @@ footer {
   align-items: center;
   font-size: 30px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cell:hover {
+  background-color: #e6e6e6;
 }
 
 .square {
@@ -113,9 +160,37 @@ footer {
   font-size: 48px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.square:hover {
+  background-color: #e6e6e6;
 }
 
 canvas {
   border: 1px solid #000;
   background-color: white;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .connect-four, .tic-tac-toe, .pictionary {
+    padding: 10px;
+  }
+
+  .cell {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .square {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+  }
 }
