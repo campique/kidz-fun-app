@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TicTacToe from './TicTacToe';
-import ConnectFour from './ConnectFour';
-import Pictionary from './Pictionary';
+import TicTacToe from './games/TicTacToe';
+import ConnectFour from './games/ConnectFour';
+import Pictionary from './games/Pictionary';
 import './games.css';
 
 const Games = () => {
