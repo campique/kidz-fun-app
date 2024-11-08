@@ -1,7 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import GameSelection from './components/GameSelection';
+import GameMode from './components/GameMode';
 import Lobby from './components/Lobby';
-import Games from './components/Games';
 import TicTacToe from './components/games/TicTacToe';
 import ConnectFour from './components/games/ConnectFour';
 import Pictionary from './components/games/Pictionary';
@@ -16,13 +18,13 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<Navigate to="/lobby" />} />
-            <Route path="/lobby" element={<Lobby />} />
-            <Route path="/games" element={<Games />} />
-            <Route path="/game/tictactoe" element={<TicTacToe />} />
-            <Route path="/game/connectfour" element={<ConnectFour />} />
-            <Route path="/game/pictionary" element={<Pictionary />} />
-            <Route path="/game/:roomId" element={<Games />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/games" element={<GameSelection />} />
+            <Route path="/game/:gameName/mode" element={<GameMode />} />
+            <Route path="/game/:gameName/lobby" element={<Lobby />} />
+            <Route path="/game/tictactoe/:mode" element={<TicTacToe />} />
+            <Route path="/game/connectfour/:mode" element={<ConnectFour />} />
+            <Route path="/game/pictionary/:mode" element={<Pictionary />} />
           </Routes>
         </main>
         <footer className="App-footer">
